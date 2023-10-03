@@ -12,28 +12,23 @@ app.use(express.json({limit: '50mb'}))
 connectDB();
 
 app.post('/addOrder', async (req, res) => {
-    const result = await Order.create({
+    const order = await Order.create({
         product: req.body.product,
         firstName: req.body.firstName,
         secondName: req.body.secondName
     });
 
-    if (result) {
-        res.sendStatus(200)
-        return
-    }
-})
-
-app.post('/updateGift', async (req, res) => {
     const result = await Gift.findOne({product: req.body.product}).exec();
     result.booked = true;
+    await result.save()
 
-    if (await result.save()) {
-        res.sendStatus(200)
+    const gifts = await Gift.find({booked: false}).exec();
+    if(gifts){
+        res.json(gifts)
         return
     }
+    res.send('')
 })
-
 
 app.get('/gifts', async (req, res) => {
     const gifts = await Gift.find({booked: false}).exec();
