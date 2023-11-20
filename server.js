@@ -20,6 +20,7 @@ app.use((req, res, next) => {
 connectDB();
 
 app.post('/addOrder', async (req, res) => {
+    if(req.method === 'OPTIONS') { return res.status(200).json(({ body: "OK" })) }
     const order = await Order.create({
         product: req.body.product,
         firstName: req.body.firstName,
@@ -39,6 +40,7 @@ app.post('/addOrder', async (req, res) => {
 })
 
 app.get('/gifts', async (req, res) => {
+    if(req.method === 'OPTIONS') { return res.status(200).json(({ body: "OK" })) }
     const gifts = await Gift.find({booked: false}).exec();
 
     if(gifts){
