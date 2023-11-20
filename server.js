@@ -19,6 +19,9 @@ app.use((req, res, next) => {
 
 connectDB();
 
+
+
+
 app.post('/addOrder', async (req, res) => {
     if(req.method === 'OPTIONS') { return res.status(200).json(({ body: "OK" })) }
     const order = await Order.create({
@@ -67,3 +70,5 @@ mongoose.connection.once('open', () => {
         console.log(`App is running on port ${ PORT }`);
     });
 });
+
+module.exports = app
